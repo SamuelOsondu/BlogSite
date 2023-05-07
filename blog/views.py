@@ -13,3 +13,7 @@ def blog(request):
 
 def post(request):
     return render(request, "blog/post.html")
+
+
+def commit(request):
+    return render(request, "blog/post.html")
