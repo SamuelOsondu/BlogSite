@@ -12,55 +12,22 @@
           <main class="col-lg-8"> 
             <div class="container">
               <div class="row gy-4 mb-5">
+
+                  {% for each_post in posts %}
                 <!-- post -->
-                <div class="col-xl-6"><a class="mb-3" href="{% url 'post' %}"><img class="img-fluid" src="{% static "blog/img/blog-post-1.jpeg" %}" alt="..."/></a>
-                  <div class="d-flex align-items-center justify-content-between mb-2"><small class="text-gray-500">20 May | 2016</small><a class="small fw-bold text-uppercase small" href="!#">Business</a></div>
-                  <h3 class="h4"><a class="text-dark" href="{% url 'post' %}">Alberto Savoia Can Teach You About Interior</a></h3>
-                  <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                <div class="col-xl-6"><a class="mb-3" href="{% url 'post' each_post.id %}"><img class="img-fluid" src="{{ each_post.post_image.url }}" alt="..."/></a>
+                  <div class="d-flex align-items-center justify-content-between mb-2"><small class="text-gray-500">{{ each_post.publish }}</small><a class="small fw-bold text-uppercase small" href="!#">Business</a></div>
+                  <h3 class="h4"><a class="text-dark" href="{% url 'post' each_post.id  %}">{{ each_post.title }}</a></h3>
+                  <p class="text-muted text-sm">{{ each_post.intro_text}}</p>
                   <ul class="list-inline list-separated text-gray-500 mb-0">
                     <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
-                        <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-3.jpg" %}" alt="..."/></div><small>John Doe</small></a></li>
-                    <li class="list-inline-item small"><i class="far fa-clock"></i> 2 months ago</li>
+                        <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-3.jpg" %}" alt="..."/></div><small>{{ each_post.author }}</small></a></li>
+                    <li class="list-inline-item small"><i class="far fa-clock"></i> {{ each_post.updated }}</li>
                     <li class="list-inline-item small"><i class="far fa-comment"></i> 12</li>
                   </ul>
                 </div>
-                <!-- post             -->
-                <div class="col-xl-6"><a class="mb-3" href="{% url 'post' %}"><img class="img-fluid" src="{% static "blog/img/blog-post-2.jpg" %}" alt="..."/></a>
-                  <div class="d-flex align-items-center justify-content-between mb-2"><small class="text-gray-500">20 May | 2016</small><a class="small fw-bold text-uppercase small" href="!#">Business</a></div>
-                  <h3 class="h4"><a class="text-dark" href="{% url 'post' %}">Alberto Savoia Can Teach You About Interior</a></h3>
-                  <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                  <ul class="list-inline list-separated text-gray-500 mb-0">
-                    <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
-                        <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-2.jpg" %}" alt="..."/></div><small>John Doe</small></a></li>
-                    <li class="list-inline-item small"><i class="far fa-clock"></i> 2 months ago</li>
-                    <li class="list-inline-item small"><i class="far fa-comment"></i> 12</li>
-                  </ul>
-                </div>
-                <!-- post             -->
-                <div class="col-xl-6"><a class="mb-3" href="{% url 'post' %}"><img class="img-fluid" src="{% static "blog/img/blog-post-3.jpeg" %}" alt="..."/></a>
-                  <div class="d-flex align-items-center justify-content-between mb-2"><small class="text-gray-500">20 May | 2016</small><a class="small fw-bold text-uppercase small" href="!#">Business</a></div>
-                  <h3 class="h4"><a class="text-dark" href="{% url 'post' %}">Alberto Savoia Can Teach You About Interior</a></h3>
-                  <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                  <ul class="list-inline list-separated text-gray-500 mb-0">
-                    <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
-                        <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-3.jpg" %}" alt="..."/></div><small>John Doe</small></a></li>
-                    <li class="list-inline-item small"><i class="far fa-clock"></i> 2 months ago</li>
-                    <li class="list-inline-item small"><i class="far fa-comment"></i> 12</li>
-                  </ul>
-                </div>
-                <!-- post -->
-                <div class="col-xl-6"><a class="mb-3" href="{% url 'post' %}"><img class="img-fluid" src="{% static "blog/img/blog-post-4.jpeg" %}" alt="..."/></a>
-                  <div class="d-flex align-items-center justify-content-between mb-2"><small class="text-gray-500">20 May | 2016</small><a class="small fw-bold text-uppercase small" href="!#">Business</a></div>
-                  <h3 class="h4"><a class="text-dark" href="{% url 'post' %}">Alberto Savoia Can Teach You About Interior</a></h3>
-                  <p class="text-muted text-sm">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                  <ul class="list-inline list-separated text-gray-500 mb-0">
-                    <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
-                        <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-1.jpg" %}" alt="..."/></div><small>John Doe</small></a></li>
-                    <li class="list-inline-item small"><i class="far fa-clock"></i> 2 months ago</li>
-                    <li class="list-inline-item small"><i class="far fa-comment"></i> 12</li>
-                  </ul>
-                </div>
-              </div>
+                  {% endfor %}
+
               <!-- Pagination -->
               <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
