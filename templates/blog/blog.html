@@ -15,9 +15,9 @@
 
                   {% for each_post in posts %}
                 <!-- post -->
-                <div class="col-xl-6"><a class="mb-3" href="{% url 'post' each_post.id %}"><img class="img-fluid" src="{{ each_post.post_image.url }}" alt="..."/></a>
+                <div class="col-xl-6"><a class="mb-3" href="{{ each_post.get_absolute_url }}"><img class="img-fluid" src="{{ each_post.post_image.url }}" alt="..."/></a>
                   <div class="d-flex align-items-center justify-content-between mb-2"><small class="text-gray-500">{{ each_post.publish }}</small><a class="small fw-bold text-uppercase small" href="!#">Business</a></div>
-                  <h3 class="h4"><a class="text-dark" href="{% url 'post' each_post.id  %}">{{ each_post.title }}</a></h3>
+                  <h3 class="h4"><a class="text-dark" href="{{ each_post.get_absolute_url }}">{{ each_post.title }}</a></h3>
                   <p class="text-muted text-sm">{{ each_post.intro_text}}</p>
                   <ul class="list-inline list-separated text-gray-500 mb-0">
                     <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
@@ -31,13 +31,19 @@
               <!-- Pagination -->
               <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
-                  <li class="page-item"><a class="page-link" href="!#"><i class="fas fa-angle-left"></i></a></li>
-                  <li class="page-item active"><a class="page-link" href="!#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="!#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="!#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="!#"><i class="fas fa-angle-right"></i></a></li>
+
+                  {% if posts.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}"><i class="fas fa-angle-left"></i></a></li>
+                  {% endif %}
+                <span class="current">
+                  Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                </span>
+                {% if posts.has_next %}
+                  <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}"><i class="fas fa-angle-right"></i></a></li>
+                {% endif %}
                 </ul>
               </nav>
+            </div>
             </div>
           </main>
           <aside class="col-lg-4">

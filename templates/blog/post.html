@@ -9,35 +9,37 @@
         <div class="row gy-5">
           <!-- Latest Posts -->
           <main class="col-lg-8"> 
-            <div class="container"><img class="img-fluid w-100 mb-4" src="{% static "blog/img/blog-post-3.jpeg" %}" alt="...">
+            <div class="container"><img class="img-fluid w-100 mb-4" src="{{post.post_image.url}}" alt="...">
               <ul class="list-inline mb-3">
                 <li class="list-inline-item"><a class="text-uppercase" href="!#">Business</a></li>
                 <li class="list-inline-item"><a class="text-uppercase" href="!#">Technology</a></li>
               </ul>
-              <h1 class="mb-4">Diversity in Engineering: The Effect on Questions<a href="!#"><i class="fa fa-bookmark-o"></i></a></h1>
+              <h1 class="mb-4">{{ post.title }}<a href="!#"><i class="fa fa-bookmark-o"></i></a></h1>
               <ul class="list-inline list-separated text-gray-500 mb-5">
                 <li class="list-inline-item"><a class="d-flex align-items-center flex-wrap text-reset" href="!#">
-                    <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-1.jpg" %}" alt="..."></div><small>John Doe</small></a></li>
-                <li class="list-inline-item small"><i class="far fa-clock"></i> 2 months ago</li>
+                    <div class="avatar flex-shrink-0"><img class="img-fluid" src="{% static "blog/img/avatar-1.jpg" %}" alt="..."></div><small>{{ post.author }}</small></a></li>
+                <li class="list-inline-item small"><i class="far fa-clock"></i> {{ post.updated }} </li>
                 <li class="list-inline-item small"><i class="far fa-comment"></i> 12</li>
               </ul>
               <div class="post-body">
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p class="lead">{{ post.intro_text }}</p>
                 <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <p class="mb-4"><img class="img-fluid" src="{% static "blog/img/featured-pic-3.jpeg" %}" alt="..."></p>
                 <h3>Lorem Ipsum Dolor</h3>
-                <p class="mb-4">div Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda temporibus iusto voluptates deleniti similique rerum ducimus sint ex odio saepe. Sapiente quae pariatur ratione quis perspiciatis deleniti accusantium</p>
+                <p class="mb-4">{{ post.body }}</p>
                 <div class="border-start border-4 mb-3">
                   <figure class="border p-4">
                     <blockquote class="blockquote">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                              labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                              laboris nisi ut aliquip.</p>
                     </blockquote>
                     <figcaption class="blockquote-footer mb-0">Someone famous in
                       <cite title="Source Title">Source Title</cite>
                     </figcaption>
                   </figure>
                 </div>
-                <p>quasi nam. Libero dicta eum recusandae, commodi, ad, autem at ea iusto numquam veritatis, officiis. Accusantium optio minus, voluptatem? Quia reprehenderit, veniam quibusdam provident, fugit iusto ullam voluptas neque soluta adipisci ad.</p>
+                <p>{{ post.body }}</p>
               </div>
               <ul class="list-inline mb-5">
                 <li class="list-inline-item"><a class="tag" href="!#">#Business</a></li>

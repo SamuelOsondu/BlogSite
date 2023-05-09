@@ -19,7 +19,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
     title = models.CharField(max_length=250)
-    slug = models.SlugField(max_length=250)
+    slug = models.SlugField(max_length=250, unique_for_date='publish')
     intro_text = models.TextField(blank=True)
     body = models.TextField()
     post_image = models.ImageField(upload_to='images/', blank=True)
@@ -40,4 +40,10 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('blog:post', args=[self.id])
+        return reverse('blog:post',
+                       args=[self.id,
+                             self.publish.year,
+                             self.publish.month,
+                             self.publish.day,
+                             self.slug]
+                       )
