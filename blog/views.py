@@ -1,6 +1,8 @@
+from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
+from blog.forms import EmailPostForm
 from blog.models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -36,6 +38,7 @@ def blog(request):
 
 
 def post(request,  post_id, year, month, day, slug):
+    # retrieving the post
     each_post = get_object_or_404(Post,
                                   status=Post.Status.PUBLISHED,
                                   id=post_id,
@@ -43,5 +46,29 @@ def post(request,  post_id, year, month, day, slug):
                                   publish__year=year,
                                   publish__month=month,
                                   publish__day=day)
-    return render(request, "blog/post.html", {'post': each_post})
+    sent = False
+
+    if request.method == 'POST':
+        # form was submitted
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            # form passed validation
+            cd = form.cleaned_data
+            # ....send email
+            post_url = request.build_absolute_uri(
+                each_post.get_absolute_url()
+            )
+            subject = f"{cd['name']} recommends you read " \
+                      f"{each_post.title}"
+            message = f"Read {each_post.title} at {post_url}\n\n" \
+                      f"{cd['name']}\'s comments: {cd['comments']}"
+            send_mail(subject, message, 'your_account@gmail.com',
+                      [cd['to']])
+            sent = True
+
+    else:
+        form = EmailPostForm()
+
+    return render(request, "blog/post.html", {'post': each_post, 'form': form})
+
 
