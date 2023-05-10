@@ -79,6 +79,8 @@
                   </div>
                 </div>
               </div>
+
+
               <div class="mb-5">
                 <header>
                   <h3 class="h6 mb-4">Leave a reply</h3>
@@ -107,6 +109,25 @@
                 </form>
               </div>
             </div>
+
+
+           <div class="mb-5">
+               {% if sent %}
+                <h1>E-mail successfully sent</h1>
+                <p>
+                "{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.
+                </p>
+               {% else %}
+                    <h1>Share "{{ post.title }}" by e-mail</h1>
+                    <form method="post">
+                    {{ form.as_p }}
+                    {% csrf_token %}
+                    <input type="submit" value="Send e-mail">
+                    </form>
+                    {% endif %}
+              </div>
+
+
           </main>
           <aside class="col-lg-4">
             <!-- Widget [Search Bar Widget]-->
