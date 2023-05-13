@@ -1,8 +1,9 @@
 from django.core.mail import send_mail
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 
-from blog.forms import EmailPostForm
+from blog.forms import EmailPostForm, CommentForm
 from blog.models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -37,15 +38,10 @@ def blog(request):
 #     template_name = 'blog/blog.html'
 
 
-def post(request,  post_id, year, month, day, slug):
-    # retrieving the post
-    each_post = get_object_or_404(Post,
-                                  status=Post.Status.PUBLISHED,
-                                  id=post_id,
-                                  slug=slug,
-                                  publish__year=year,
-                                  publish__month=month,
-                                  publish__day=day)
+
+
+def send_email(request, post_id):
+    each_post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
     sent = False
 
     if request.method == 'POST':
@@ -69,6 +65,58 @@ def post(request,  post_id, year, month, day, slug):
     else:
         form = EmailPostForm()
 
-    return render(request, "blog/post.html", {'post': each_post, 'form': form})
+    return render(request, 'blog/post.html', {'post': each_post, 'form': form, 'sent': sent})
 
+
+def post(request,  post_id, year, month, day, slug):
+    # retrieving the post
+    each_post = get_object_or_404(Post,
+                                  status=Post.Status.PUBLISHED,
+                                  id=post_id,
+                                  slug=slug,
+                                  publish__year=year,
+                                  publish__month=month,
+                                  publish__day=day)
+
+    # List of all active comments for this post
+    comments = each_post.comments.filter(active=True)
+    # Form for users to comment
+    form = CommentForm()
+    return render(request, "blog/post.html", {'post': each_post,
+                                              'comments': comments,
+                                              'form': form,
+                                              })
+
+
+@require_POST
+def post_comment(request,  post_id, year, month, day, slug):
+    # each_post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+
+    each_post = get_object_or_404(Post,
+                                  status=Post.Status.PUBLISHED,
+                                  id=post_id,
+                                  slug=slug,
+                                  publish__year=year,
+                                  publish__month=month,
+                                  publish__day=day)
+
+    comment = None
+    # A comment was posted
+    form = CommentForm(data=request.POST)
+    if form.is_valid():
+        # Create a comment object without saving it to the database
+        comment = form.save(commit=False)
+        # Assign the post to the comment
+        comment.post = each_post
+        # save the comment to the database
+        comment.save()
+        return redirect('blog:post', each_post.id, each_post.slug, each_post.publish.year,
+                        each_post.publish.month,
+                        each_post.publish.day,
+                        )
+
+    return render(request, 'blog/post.html', {'post': each_post,
+                                              'form': form,
+                                              'comment': comment
+                                              })
 
