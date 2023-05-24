@@ -8,6 +8,7 @@ urlpatterns = [
     path('blog/', views.blog, name='blog'),
     # path('', views.BlogListView.as_view(), name='blog'),
     path('post/<int:post_id>/<int:year>/<int:month>/<int:day>/<slug:slug>/', views.post, name='post'),
-    path('<int:post_id>/send_email/', views.send_email, name='send_email'),
-    path('<int:post_id>/comment/', views.post_comment, name='post_comment'),
+    path('send_email/<int:post_id>/', views.send_email, name='send_email'),
+    path('comment/<int:post_id>/<int:year>/<int:month>/<int:day>/<slug:slug>/', views.post_comment, name='post_comment'),
+    path('tag/<slug:tag_slug>/', views.post, name='post_by_tag'),
 ]

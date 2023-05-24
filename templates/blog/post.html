@@ -41,12 +41,25 @@
                 </div>
                 <p>{{ post.body }}</p>
               </div>
+            {% if tag %}
               <ul class="list-inline mb-5">
-                <li class="list-inline-item"><a class="tag" href="!#">#Business</a></li>
+              <h3> Posts tagged with </h3>
+                <li class="list-inline-item"><a class="tag" href="!#">#{{ tag.name }}</a></li>
                 <li class="list-inline-item"><a class="tag" href="!#">#Tricks</a></li>
                 <li class="list-inline-item"><a class="tag" href="!#">#Financial</a></li>
                 <li class="list-inline-item"><a class="tag" href="!#">#Economy</a></li>
               </ul>
+            {% endif %}
+
+            {% for tag in post.tags.all %}
+            <a href="{% url "blog:post_by_tag" tag.slug %}">
+            {{ tag.name }}
+            </a>
+            {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+
+
+
               <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row mb-5"><a class="prev-post text-start d-flex align-items-center" href="!#">
                   <div class="icon prev"><i class="fas fa-angle-left"></i></div>
                   <div class="text"><strong class="text-primary">Previous Post </strong>
@@ -107,17 +120,19 @@
 {#              </div>#}
 {#            </div>#}
 
+{#              Adding comments #}
             {% if comment %}
             <h2>Your comment has been added.</h2>
             <p><a href="{{ post.get_absolute_url }}">Back to the post</a></p>
             {% else %}
                 <h2>Add a new comment</h2>
-                <form action="{% url "blog:post_comment" post.id %}" method="post">
+                <form action="{% url "blog:post_comment" post.id post.publish.year post.publish.month post.publish.day post.slug %}" method="post">
                 {{ form.as_p }}
                 {% csrf_token %}
                 <p><input type="submit" value="Add comment"></p>
                 </form>
             {% endif %}
+
 
            <div class="mb-5">
                {% if sent %}
@@ -134,7 +149,16 @@
                     </form>
                     {% endif %}
               </div>
+            
 
+                <h2>Similar posts</h2>
+                {% for post in similar_posts %}
+                <p>
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </p>
+                {% empty %}
+                There are no similar posts yet.
+                {% endfor %}
 
 
           </main>
@@ -195,12 +219,16 @@
                 <div class="p-2 d-flex justify-content-between fw-bold text-gray-600 bg-light"><a class="text-reset" href="!#">Local</a><span>25</span></div>
               </div>
             </div>
+
+
             <!-- Widget [Tags Cloud Widget]-->
             <div class="card">
               <div class="card-body">     
                 <h3 class="h6 mb-3">Tags</h3>
                 <ul class="list-inline mb-0">
-                  <li class="list-inline-item"><a class="tag" href="!#">#Business </a></li>
+                    {% for tag in post.tags.all %}
+                  <li class="list-inline-item"><a class="tag" href="!#">#{{ tag }}</a></li>
+                    {% endfor %}
                   <li class="list-inline-item"><a class="tag" href="!#">#Fashion </a></li>
                   <li class="list-inline-item"><a class="tag" href="!#">#Sports </a></li>
                   <li class="list-inline-item"><a class="tag" href="!#">#Technology </a></li>

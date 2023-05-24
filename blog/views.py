@@ -1,7 +1,9 @@
 from django.core.mail import send_mail
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
+from taggit.models import Tag
 
 from blog.forms import EmailPostForm, CommentForm
 from blog.models import Post
@@ -15,8 +17,14 @@ def home(request):
     return render(request, "blog/index.html")
 
 
-def blog(request):
+def blog(request, tag_slug=None):
     posts = Post.published.all()
+
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
+
     # Pagination with three posts per page.
     paginator = Paginator(posts, 3)
     page_number = request.GET.get('page', 1)
@@ -28,7 +36,7 @@ def blog(request):
     except EmptyPage:
         # if page is out of range
         posts_list = paginator.page(paginator.num_pages)
-    return render(request, "blog/blog.html", {'posts': posts_list})
+    return render(request, "blog/blog.html", {'posts': posts_list, 'tag': tag})
 
 
 # class BlogListView(ListView):
@@ -36,8 +44,6 @@ def blog(request):
 #     context_object_name = 'posts'
 #     paginate_by = 3
 #     template_name = 'blog/blog.html'
-
-
 
 
 def send_email(request, post_id):
@@ -82,9 +88,15 @@ def post(request,  post_id, year, month, day, slug):
     comments = each_post.comments.filter(active=True)
     # Form for users to comment
     form = CommentForm()
+
+    # List of similar posts
+    post_tags_ids = each_post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=each_post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
     return render(request, "blog/post.html", {'post': each_post,
                                               'comments': comments,
                                               'form': form,
+                                              'similar_posts': similar_posts,
                                               })
 
 
@@ -110,9 +122,10 @@ def post_comment(request,  post_id, year, month, day, slug):
         comment.post = each_post
         # save the comment to the database
         comment.save()
-        return redirect('blog:post', each_post.id, each_post.slug, each_post.publish.year,
+        return redirect('blog:post', each_post.id, each_post.publish.year,
                         each_post.publish.month,
                         each_post.publish.day,
+                        each_post.slug,
                         )
 
     return render(request, 'blog/post.html', {'post': each_post,
